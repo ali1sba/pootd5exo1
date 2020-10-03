@@ -12,7 +12,7 @@ class Formation {
     //private static int cpt = 0;
 
     //constracture
-    public Formation (String code){
+    public Formation  (String code){
         this.codeDeFormation = code;
         this.listeEtudient = new ArrayList<Etudient>();
     }
@@ -53,6 +53,7 @@ class Formation {
     //q3
     // for get
     List <Etudient> trouver (String name){
+
         LinkedList <Etudient> list = new LinkedList<Etudient>();
       for (int i = 0 ; i < listeEtudient.size() ; i++){
         Etudient x = listeEtudient.get(i);
@@ -79,10 +80,58 @@ class Formation {
             }
         }
 
-
-
         return list ;
     }
+
+    //q4
+
+    void modifier (int matricule , String nom){
+        Etudient e ;
+        // for get
+        for (int i=1 ; i < listeEtudient.size();i++){
+
+            e = listeEtudient.get(i);
+            if (e.getMatricule() == matricule){
+                listeEtudient.set(i,new Etudient(nom, matricule));
+            }
+        }
+        //iterator
+        Iterator <Etudient> iteerator = listeEtudient.iterator();
+        int cpt=0;
+        while (iteerator.hasNext()) {
+            e=iteerator.next();
+            cpt++;
+            if (e.getMatricule() == matricule){
+                listeEtudient.set(cpt,new Etudient(nom, matricule));
+            }
+
+        }
+        cpt=0;
+        //for each
+        for (Etudient etd:listeEtudient){
+            cpt++;
+            if (etd.getMatricule() == matricule){
+                listeEtudient.set(cpt,new Etudient(nom, matricule));
+            }
+        }
+    }
+
+
+    //q8-b
+
+    public int fonction8 (String nom){
+        int nbEtudiant= 0;
+        for (Etudient e : this.listeEtudient) {
+            if(EtudiantEtrangie.class.isInstance(e)&&
+                    e.getNom().equals(nom)){
+                nbEtudiant++;
+            }
+        }
+        return nbEtudiant;
+    }
+
+
+
 
 }
 
@@ -117,8 +166,46 @@ class Etudient {
     public void setNom(String nom) {
         this.nom = nom;
     }
+    @Override
+    public boolean equals (Object o){
+        if(Etudient.class.isInstance(o)) {
+            Etudient e= (Etudient) o;
+            return (e.getMatricule()== this.getMatricule()) &&
+                    (e.getNom().equals(this.getNom()));
+        }else {
+            return false;
+        }
+    }
+
+}
 
 
+class EtudiantAlgerien extends Etudient {
+
+    public EtudiantAlgerien(String nom, int matricule) {
+        super(nom, matricule);
+    }
+}
+
+class  EtudiantEtrangie extends Etudient {
+
+    private String nationaliter;
+
+
+
+    public EtudiantEtrangie (String nom , int matricule , String nationaliter){
+        super(nom, matricule);
+        this.nationaliter = nationaliter;
+    }
+
+
+    public String getNationaliter() {
+        return nationaliter;
+    }
+
+    public void setNationaliter(String nationaliter) {
+        this.nationaliter = nationaliter;
+    }
 }
 
 
@@ -137,7 +224,23 @@ List <Etudient> list = javaformation.trouver("ali");
         for (Etudient e : list ){
         System.out.println(e.getNom());
         }
+        System.out.println();
+
+        for (Etudient e : javaformation.getListeEtudient() ){
+            System.out.println(e.getMatricule()+","+e.getNom());
+        }
+        System.out.println();
+
+        System.out.println("4,ali"+javaformation.getListeEtudient().contains(new Etudient("ali",4)));
+        System.out.println();
+        javaformation.getListeEtudient().remove(new Etudient("ali",4));
+
+        for (Etudient e : javaformation.getListeEtudient() ){
+            System.out.println(e.getMatricule()+","+e.getNom());
+        }
 
 
+        Formation javaformation2 = new Formation("code2");
+        javaformation2.setListeEtudient(new ArrayList<Etudient>(javaformation.getListeEtudient()));
     }
 }
